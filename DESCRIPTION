@@ -6,8 +6,9 @@ Authors@R:
            family = "Silver",
            role = c("aut", "cre"),
            email = "srs325@english.rutgers.edu")
-Description: NovNet includes tools and utilities associated with the Novel Networks Project at Rutgers.  Novel Networks compiles name-normalized digital texts of eighteenth-century novels (ca. 1650-1850).  Name-normalization means that all character proper names are associated with a single unique name, making possible the extraction of character token networks.  NovNet also includes a number of user-friendly, out-of-the-box tools to generate graph and network-type visualizations.
-URL: http://sites.Rutgers.edu/novel-networks/
+Description: NovNet includes tools and utilities associated with the Novel Networks Project at Rutgers.  Novel Networks compiles name-normalized digital texts of eighteenth-century novels (ca. 1650-1850).  Name-normalization means that all character proper names are associated with a single unique name, making possible the extraction of character token networks.  NovNet also includes a number of user-friendly, out-of-the-box tools to generate graph and network-type visualizations. Please visit http://sites.rutgers.edu/novel-networks/.
+URL: http://github.com/seanrsilver/novnet
+BugReports: http://github.com/seanrsilver/novnet/issues
 License: MIT + file LICENSE
 Imports: igraph, ggplot2, tm, stringi, googledrive, RColorBrewer
 Encoding: UTF-8
