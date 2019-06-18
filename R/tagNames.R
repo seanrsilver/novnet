@@ -184,7 +184,8 @@ tagNames <- function(filename,
                            by = hash.length.v), digits = 0)
   prog.hash.ticker <- 2
 
-  cat("Removing sticky names and forming front half of character tags.\n")
+  cat("Removing sticky names and forming front half of character tags.
+      Please be patient.")
   if(nrow(alt.sticky.df) > 0){
     for(i in 1:length(alt.sticky.df$regex)){
       if(i == prog.hash.v[prog.hash.ticker]){
@@ -200,7 +201,8 @@ tagNames <- function(filename,
   }
   cat("\n")
 
-  cat("Adding uniqnames and forming back half of character tags")
+  cat("Adding uniqnames and forming back half of character tags.
+      Almost finished.")
   prog.hash.v <- round(seq(from = 0,
                            to = length(alt.sticky.df$regex),
                            by = hash.length.v), digits = 0)
