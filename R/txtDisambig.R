@@ -31,7 +31,7 @@
 #' @export
 
 
-txtDisambig <- function(filename = filename.v,
+txtDisambig <- function(filename,
                         local = FALSE,
                         write.report = TRUE,
                         return.results = FALSE){
@@ -101,7 +101,6 @@ txtDisambig <- function(filename = filename.v,
                                   charname.col.v:ncol(char.data.df)]
     row.names(char.names.df) <- char.data.df[11:nrow(char.data.df), 1]
   }
-
 
   ## e) create name.alt.df data frame, with columns of:
   ##     i) name alternates
@@ -192,10 +191,32 @@ txtDisambig <- function(filename = filename.v,
 
   ## h) brackets all ambiguous names: "[ alt ]"
   # use duplicate.alt.v, a vector of duplicate names (with no duplicates!)
-  cat("\nBracketing all ambiguous names.\n")
+    # to pull pairs from alt.sticky.df
+  duplicate.alt.df <- data.frame(alt = character(),
+                                 regex = character(),
+                                 sticky = character(),
+                                 stickyRegex = character())
   for(i in 1:length(duplicate.alt.v)){
-    text.s <- gsub(paste0("\\<", duplicate.alt.v[i], "\\W"),
-                   paste("[", duplicate.alt.v[i], "\\1]"),
+    temp.duplicates.df <- alt.sticky.df[which(alt.sticky.df$alt == duplicate.alt.v[i]), ]
+    temp.duplicates.df <- temp.duplicates.df[1, c("alt", "regex", "sticky", "stickyRegex")]
+    duplicate.alt.df <- rbind.data.frame(duplicate.alt.df, temp.duplicates.df)
+  }
+  # order long to short
+  duplicate.alt.df <- duplicate.alt.df[order(sapply(strsplit(duplicate.alt.df[, "alt"], " "), length),
+                                       decreasing = TRUE), ]
+  rownames(duplicate.alt.df) <- 1:nrow(duplicate.alt.df)
+  
+  cat("\nBracketing all ambiguous names.\n")
+  # first bracket and replace names with sticky names
+  for(i in 1:nrow(duplicate.alt.df)){
+    text.s <- gsub(duplicate.alt.df$regex[i],
+                   paste0("[ ", duplicate.alt.df$sticky[i], " ]\\1"),
+                   text.s)
+  }
+  # now remove sticky names and replace with original alt
+  for(i in 1:nrow(duplicate.alt.df)){
+    text.s <- gsub(duplicate.alt.df$stickyRegex[i], 
+                   paste0(duplicate.alt.df$alt[i], "\\1"), 
                    text.s)
   }
 
@@ -224,20 +245,20 @@ txtDisambig <- function(filename = filename.v,
 
   ## i) pairs duplicate name alternates with uniqnames, and pastes it at the head of text.out.v
   ambiguous.alt <- NULL
-  if(length(ambiguous.alt) > 0){
-    for(i in 1:length(ambiguous.alt)){
-      uniqname.v <- alt.sticky.df$uniqname[which(alt.sticky.df == ambiguous.alt[i])]
+  if(length(duplicate.alt.v) > 0){
+    for(i in 1:length(duplicate.alt.v)){
+      uniqname.v <- alt.sticky.df$uniqname[which(alt.sticky.df == duplicate.alt.v[i])]
       uniqname.v <- uniqname.v[!is.na(uniqname.v)]
       uniqname.s <- paste("'", uniqname.v, "'", collapse = ", ")
       ambiguous.alt[i] <- paste("Alternate name [ ",
-                                ambiguous.alt[i],
+                                duplicate.alt.v[i],
                                 " ] refers to uniqnames: ",
                                 uniqname.s,
                                 sep = "")
     }
   }
 
-  ambiguous.alt.out <- ambiguous.alt
+  ambiguous.alt.out <- duplicate.alt.v
   if(length(ambiguous.alt) == 0){
     ambiguous.alt <- "  [[ no names need to be disambiguated ]]"
     ambiguous.alt.out <- c()

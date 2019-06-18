@@ -247,8 +247,10 @@ tagNames <- function(filename,
                     "This text compiled by function tagNames(), part of the
                     novel-networks package for R.",
                     "",
-                    "NOTE: tagNames() will not flag names that end in
-                    punctuation marks, such as Lord A. or Mrs. B---",
+                    "NOTE: tagNames() will sometimes mistag alternate names
+                    in ambiguous situations:
+                      a) situations where names overlap in the text:
+                          is 'the cook-maid' alternate name 'the cook' or 'cook-maid'?",
                     "",
                     "BEGIN TEXT:",
                     ""
